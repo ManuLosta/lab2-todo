@@ -8,21 +8,32 @@ interface User {
 export interface AuthContext {
   isAuthenticated: boolean;
   user: User | null;
+  updateUser: (user: User) => void;
 }
 
-function getStoredUser() {
-  const user = localStorage.getItem("user");
-  if (user) return JSON.parse(user);
+function getStoredUser(): User | null {
+  const username = localStorage.getItem("username");
+  const access_token = localStorage.getItem("token")
+  if (username && access_token) {
+    return {username, access_token}
+  }
+  return null
 }
 
 const AuthContext = createContext<AuthContext | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(getStoredUser());
-  const isAuthenticated = false;
+  const isAuthenticated = !!user;
+
+  const updateUser = async (user: User) => {
+    setUser(user);
+    localStorage.setItem("username", user.username);
+    localStorage.setItem("token", user.access_token);
+  }
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

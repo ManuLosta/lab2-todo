@@ -1,26 +1,26 @@
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useAuth } from "../auth";
+import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 
 type Input = {
   username: string;
   password: string;
+  repeatPassword: string;
 };
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const { register, handleSubmit } = useForm<Input>();
-  const { updateUser } = useAuth();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const mutation = useMutation({
     mutationFn: (data: Input) => {
-      return axios.post("http://localhost:3000/auth/login", data);
+      return axios.post("http://localhost:3000/auth/register", {
+        username: data.username,
+        password: data.password
+      });
     },
-    onSuccess: async (res) => {
-      const user = res.data;
-      updateUser(user);
-      navigate({ to: "/" });
+    onSuccess: () => {
+      navigate({ to: "/login" })
     },
     onError: (error) => {
       console.error(error)
@@ -29,7 +29,7 @@ export default function LoginForm() {
 
   const onSubmit: SubmitHandler<Input> = (data) => {
     mutation.mutate(data)
-  };
+  }
 
   return (
     <form
@@ -57,8 +57,19 @@ export default function LoginForm() {
           {...register("password")}
         />
       </div>
+      <div className="my-2">
+        <label htmlFor="repeatPassword">
+          Repeat password
+        </label>
+        <input
+          className="input w-full mt-2"
+          type="password"
+          id="repeatPassword"
+          {...register("repeatPassword")}
+        />
+      </div>
       <button className="my-2 mx-auto btn" type="submit">
-        Login
+        Register
       </button>
     </form>
   );
