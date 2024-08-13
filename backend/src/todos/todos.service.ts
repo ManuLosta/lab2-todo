@@ -13,15 +13,18 @@ export class TodosService {
     private userModel: typeof User,
   ) {}
 
-  async create(userId: number, title: string) {
-    const user: User = await this.userModel.findOne({
-      where: {
-        id: userId,
-      },
+  private async findUserById(userId: number): Promise<User> {
+    const user = await this.userModel.findOne({
+      where: { id: userId },
+      include: [{ model: this.todoModel }],
     });
 
     if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
 
+  async create(userId: number, title: string) {
+    const user = await this.findUserById(userId);
     const newTodo = await this.todoModel.create({
       title,
       owner: user.id,
@@ -31,28 +34,12 @@ export class TodosService {
   }
 
   async findAllbyUserId(userId: number) {
-    const user: User = await this.userModel.findOne({
-      where: {
-        id: userId,
-      },
-      include: [{ model: this.todoModel }],
-    });
-
-    if (!user) throw new NotFoundException('User not found');
-
+    const user = await this.findUserById(userId);
     return user.todos;
   }
 
   async editTodo(userId: number, todo: EditTodoDto) {
-    const user: User = await this.userModel.findOne({
-      where: {
-        id: userId,
-      },
-      include: [{ model: this.todoModel }],
-    });
-
-    if (!user) throw new NotFoundException('User not found');
-
+    await this.findUserById(userId);
     return this.todoModel.update(
       {
         title: todo.title,
@@ -61,6 +48,26 @@ export class TodosService {
       {
         where: {
           id: todo.id,
+        },
+      },
+    );
+  }
+
+  async toggleCompletion(userId: number, todoId: number) {
+    const user = await this.findUserById(userId);
+    const todo = user.todos.find((todo) => todo.id === todoId);
+
+    if (!todo) throw new NotFoundException('Todo not found');
+
+    const newCompletionStatus = !todo.completed;
+
+    return this.todoModel.update(
+      {
+        completed: newCompletionStatus,
+      },
+      {
+        where: {
+          id: todoId,
         },
       },
     );
