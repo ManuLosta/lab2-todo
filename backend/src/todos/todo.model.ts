@@ -9,6 +9,6 @@ export class Todo extends Model {
   @Column
   title: string;
 
-  @Column({ defaultValue: true })
-  active: boolean;
+  @Column({ defaultValue: false })
+  completed: boolean;
 }
