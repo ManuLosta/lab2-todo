@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const fetchTodos = async (token: string) => {
-  const response = await axios.get("http://localhost:3000/todos", {
+  const response = await axios.get(`${import.meta.env.VITE_API_URL}/todos`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -12,7 +12,7 @@ export const fetchTodos = async (token: string) => {
 
 export const toggleTodoCompletion = async (token: string, id: number) => {
   const response = await axios.patch(
-    `http://localhost:3000/todos/${id}`,
+    `${import.meta.env.VITE_API_URL}/todos/${id}`,
     {},
     {
       headers: {
@@ -26,7 +26,7 @@ export const toggleTodoCompletion = async (token: string, id: number) => {
 
 export const createTodo = async (token: string, title: string) => {
   const response = await axios.post(
-    "http://localhost:3000/todos",
+    `${import.meta.env.VITE_API_URL}/todos`,
     { title },
     {
       headers: {
@@ -39,11 +39,14 @@ export const createTodo = async (token: string, title: string) => {
 };
 
 export const deleteTodo = async (token: string, id: number) => {
-  const response = await axios.delete(`http://localhost:3000/todos/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
+  const response = await axios.delete(
+    `${import.meta.env.VITE_API_URL}/todos/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
 
   return response.data;
 };

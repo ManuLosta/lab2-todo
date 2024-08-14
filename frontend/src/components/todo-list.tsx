@@ -19,8 +19,8 @@ export default function TodoList() {
     return <span>Error: {error.message}</span>;
   }
 
-  const notCompleted = data.filter((todo: Todo) => !todo.completed);
-  const completed = data.filter((todo: Todo) => todo.completed);
+  const notCompleted = data?.filter((todo: Todo) => !todo.completed);
+  const completed = data?.filter((todo: Todo) => todo.completed);
 
   return (
     <div className="flex flex-col mt-5 divide-y">

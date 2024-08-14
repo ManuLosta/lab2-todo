@@ -14,22 +14,22 @@ export default function RegisterForm() {
   const navigate = useNavigate();
   const mutation = useMutation({
     mutationFn: (data: Input) => {
-      return axios.post("http://localhost:3000/auth/register", {
+      return axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, {
         username: data.username,
-        password: data.password
+        password: data.password,
       });
     },
     onSuccess: () => {
-      navigate({ to: "/login" })
+      navigate({ to: "/login" });
     },
     onError: (error) => {
-      console.error(error)
-    }
-  })
+      console.error(error);
+    },
+  });
 
   const onSubmit: SubmitHandler<Input> = (data) => {
-    mutation.mutate(data)
-  }
+    mutation.mutate(data);
+  };
 
   return (
     <form
@@ -37,9 +37,7 @@ export default function RegisterForm() {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="my-2">
-        <label htmlFor="username">
-          Username
-        </label>
+        <label htmlFor="username">Username</label>
         <input
           className="input w-full mt-2"
           id="username"
@@ -47,9 +45,7 @@ export default function RegisterForm() {
         />
       </div>
       <div className="my-2">
-        <label htmlFor="password">
-          Password
-        </label>
+        <label htmlFor="password">Password</label>
         <input
           className="input w-full mt-2"
           type="password"
@@ -58,9 +54,7 @@ export default function RegisterForm() {
         />
       </div>
       <div className="my-2">
-        <label htmlFor="repeatPassword">
-          Repeat password
-        </label>
+        <label htmlFor="repeatPassword">Repeat password</label>
         <input
           className="input w-full mt-2"
           type="password"

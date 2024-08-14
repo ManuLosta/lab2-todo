@@ -10,11 +10,11 @@ import { Todo } from './todos/todo.model';
   imports: [
     SequelizeModule.forRoot({
       dialect: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'admin',
-      password: 'example',
-      database: 'todo',
+      host: process.env.DATABASE_HOST || 'localhost',
+      port: +process.env.DATABASE_PORT || 5432,
+      username: process.env.DATABASE_USER || 'admin',
+      password: process.env.DATABASE_PASSWORD || 'example',
+      database: process.env.DATABASE_NAME || 'todo',
       autoLoadModels: true,
       synchronize: true,
       models: [User, Todo],

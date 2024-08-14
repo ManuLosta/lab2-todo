@@ -12,10 +12,10 @@ type Input = {
 export default function LoginForm() {
   const { register, handleSubmit } = useForm<Input>();
   const { updateUser } = useAuth();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const mutation = useMutation({
     mutationFn: (data: Input) => {
-      return axios.post("http://localhost:3000/auth/login", data);
+      return axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, data);
     },
     onSuccess: async (res) => {
       const user = res.data;
@@ -23,12 +23,12 @@ export default function LoginForm() {
       navigate({ to: "/" });
     },
     onError: (error) => {
-      console.error(error)
-    }
-  })
+      console.error(error);
+    },
+  });
 
   const onSubmit: SubmitHandler<Input> = (data) => {
-    mutation.mutate(data)
+    mutation.mutate(data);
   };
 
   return (
@@ -37,9 +37,7 @@ export default function LoginForm() {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="my-2">
-        <label htmlFor="username">
-          Username
-        </label>
+        <label htmlFor="username">Username</label>
         <input
           className="input w-full mt-2"
           id="username"
@@ -47,9 +45,7 @@ export default function LoginForm() {
         />
       </div>
       <div className="my-2">
-        <label htmlFor="password">
-          Password
-        </label>
+        <label htmlFor="password">Password</label>
         <input
           className="input w-full mt-2"
           type="password"
