@@ -3,6 +3,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { User } from './users/user.model';
+import { TodosModule } from './todos/todos.module';
+import { Todo } from './todos/todo.model';
 
 @Module({
   imports: [
@@ -15,10 +17,11 @@ import { User } from './users/user.model';
       database: 'todo',
       autoLoadModels: true,
       synchronize: true,
-      models: [User],
+      models: [User, Todo],
     }),
     AuthModule,
     UsersModule,
+    TodosModule,
   ],
   controllers: [],
   providers: [],
