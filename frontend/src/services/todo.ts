@@ -37,3 +37,13 @@ export const createTodo = async (token: string, title: string) => {
 
   return response.data;
 };
+
+export const deleteTodo = async (token: string, id: number) => {
+  const response = await axios.delete(`http://localhost:3000/todos/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};

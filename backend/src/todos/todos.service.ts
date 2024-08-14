@@ -38,7 +38,7 @@ export class TodosService {
     return user.todos;
   }
 
-  async editTodo(userId: number, todo: EditTodoDto) {
+  async edit(userId: number, todo: EditTodoDto) {
     await this.findUserById(userId);
     return this.todoModel.update(
       {
@@ -71,5 +71,17 @@ export class TodosService {
         },
       },
     );
+  }
+
+  async delete(userId: number, todoId: number) {
+    const user = await this.findAllbyUserId(userId);
+
+    const todo = await this.todoModel.findOne({
+      where: {
+        id: todoId,
+      },
+    });
+
+    await todo.destroy();
   }
 }

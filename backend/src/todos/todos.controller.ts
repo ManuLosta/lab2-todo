@@ -9,6 +9,7 @@ import {
   Patch,
   Param,
   ParseIntPipe,
+  Delete,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { TodosService } from './todos.service';
@@ -32,11 +33,16 @@ export class TodosController {
 
   @Put()
   editTodo(@Request() req: any, @Body() todoDto: EditTodoDto) {
-    return this.todoService.editTodo(req.user.userId, todoDto);
+    return this.todoService.edit(req.user.userId, todoDto);
   }
 
   @Patch(':id')
   toggleCompletion(@Request() req: any, @Param('id', ParseIntPipe) id: number) {
     return this.todoService.toggleCompletion(req.user.userId, id);
+  }
+
+  @Delete(':id')
+  deleteTodo(@Request() req: any, @Param('id', ParseIntPipe) id: number) {
+    return this.todoService.delete(req.user.userId, id);
   }
 }

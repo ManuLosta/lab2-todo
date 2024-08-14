@@ -10,7 +10,7 @@ type Input = {
 export default function CreateTodo() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const { register, handleSubmit } = useForm<Input>();
+  const { register, handleSubmit, reset } = useForm<Input>();
   const mutation = useMutation({
     mutationFn: (data: Input) =>
       createTodo(user?.access_token || "", data.title),
@@ -21,6 +21,7 @@ export default function CreateTodo() {
 
   const onSubmit: SubmitHandler<Input> = (data) => {
     mutation.mutate(data);
+    reset();
   };
 
   return (
